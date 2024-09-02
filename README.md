@@ -32,11 +32,33 @@ pip install -r requirements.txt
 ## Usage
 
 1. **Dataset Reading and Network Reconstruction:**
-   - Datasets are read to reconstruct network graphs. For larger networks such as LiveJournal, YouTube, and Orkut, sampling techniques are applied to effectively manage execution times during subsequent calculations.
+   - Datasets are read to reconstruct network graphs. All datasets used in this project are publicly available. The Stack Overflow (SO) dataset has been preprocessed and is directly provided in this repository.
+
+Links to Public Datasets:
+
+**General Networks (DBLP, Amazon, Livejournal, Youtube, Orkut)**: 
+   - [SNAP Datasets](https://snap.stanford.edu/data/)
+
+**Biological Networks (PPI, DDI, and C.elegans)**:
+   - [BioSNAP Datasets](https://snap.stanford.edu/biodata/index.html)
+
+Preprocessed Dataset:
+
+   - [StackOverflow Dataset] The preprocessed network file is available in this repository as `so_network.txt`.
 
 2. **Community Detection:**
-   - Using the HLC Algorithm: In networks like SO, PPI, DDI, and C. elegans, communities are detected using the HLC algorithm.
-   - Using Ground-Truth Data: In networks such as DBLP, Amazon, LiveJournal, YouTube, and Orkut, communities are identified based on ground-truth data.
+
+   Run the script to calculate the overlapping communities for your network. If you have a ground-truth community file, this step is not necessary.
+
+```bash
+hlc_run.py 'dataset_file'
+```
+
+   Using the HLC Algorithm:
+
+   - In networks like SO, PPI, DDI, and C. elegans, communities are detected using the HLC algorithm.
+   - In networks such as DBLP, Amazon, LiveJournal, YouTube, and Orkut, communities are identified based on ground-truth data.
+   - All network datasets files must be in NCol format.
 
 3. **Metric Calculation:**
    - Network Level: Overall pluralistic homophily \( h \), OC, and \( \tilde{\rho} \) across communities are computed.
@@ -45,11 +67,10 @@ pip install -r requirements.txt
 4. **Correlation Analysis and Visualization:**
    - The linear and monotonic relationships between centrality metrics and pluralistic homophily at both the network and the node levels are initially examined using the Spearman correlation index. Logistic regression models are then utilized to predict the categories of pluralistic homophily (assortative, non-assortative, disassortative) based on the centrality measures calculated for each node.
 
-Some general consideratios:
+Some general considerations:
 
 - You must set the defaults directories for datasets and experiments result. Set the name of the directories within each script depending of your preferences.
-- All network datasets files must be in NCol format.
-- A dataset dictionary named 'netowrk' inside the scripts defines the network(s) to be processed. Change on your preferences.
+- A dataset dictionary named 'network' inside the scripts defines the network(s) to be processed. Change on your preferences.
 - Set the variables flags at the top of the script to control if you want to save the results and plot images.
 
 Run Pipeline as following:
