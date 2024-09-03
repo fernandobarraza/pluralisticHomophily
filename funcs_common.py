@@ -126,8 +126,7 @@ def read_overlaps(communities_file, scc, file_sep=',', non_trivial=3, scalar_met
     return non_trivial_communities
 
 
-def pluralistic_homophily_alg3(g, comm_file, comm_file_sep, scalar_method):
-    """Calculates pluralistic homophily using Algorithm 3."""
+def pluralistic_homophily(g, comm_file, comm_file_sep, scalar_method):
 
     def p_k(k, degrees):
         return degrees.count(k) / len(degrees)

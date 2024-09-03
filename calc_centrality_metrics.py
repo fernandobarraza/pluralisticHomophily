@@ -14,7 +14,6 @@ Libraries:
 
 Usage:
 Modify the base_dir variable to point to the appropriate directory containing your data files.
-Run the script with appropriate arguments for dataset_key and env.
 """
 
 import time
@@ -24,8 +23,6 @@ import pandas as pd
 
 t0 = time.time()
 delay = time.time() - t0
-print("duration: %.2f s." % delay)
-
 
 def load_data(graph_path, homophily_path):
     """Loads the graph and pluralistic homophily data."""
@@ -54,15 +51,6 @@ def load_data(graph_path, homophily_path):
         })
 
     return g, homophily_data
-
-
-def clean_node_ids(ig_graph):
-    """Cleans node identifiers in an igraph graph."""
-    new_graph = ig_graph.copy()
-    for vertex in new_graph.vs:
-        cleaned_id = int(vertex['name'].lstrip('DB'))
-        vertex['name'] = cleaned_id
-    return new_graph
 
 
 def stratified_sampling(homophily_data, n_samples_per_strata=100, network_size='large'):
@@ -171,17 +159,9 @@ def calculate_centrality(graph, nodes):
     }
     return pd.DataFrame(result)
 
-
-def calculate_network_metric(graph_path, homophily_path, output_path, node_sample_size, network_key):
+def calculate_network_metric(graph_path, homophily_path, output_path, node_sample_size, network_size):
     """Calculates and saves network metrics for the given graph and homophily data."""
     g, homophily_data = load_data(graph_path, homophily_path)
-
-    if network_key in ('so', 'dblp', 'amazon'):
-        network_size = 'medium'
-    elif network_key in ('ppi', 'ddi', 'celegans'):
-        network_size = 'small'
-    else:
-        network_size = 'large'
 
     sampled_nodes, homophily_values, labels = stratified_sampling(homophily_data, node_sample_size, network_size)
     print("graph node count =", g.vcount())
@@ -207,50 +187,25 @@ if __name__ == "__main__":
     from funcs_common import *
     import argparse
 
-    parser = argparse.ArgumentParser(description='Script for data processing.')
-    parser.add_argument('--env', help='Execution environment: local or AWS', default='local')
-    parser.add_argument('--dataset_key', type=str, help='Key of the dataset to process.', default='TextAb10_wsw')
+    parser = argparse.ArgumentParser(description='Script for centrality metrics calculation.')
+    parser.add_argument('--homophily_file', type=str, help='Key of the dataset to process.', default='homophilies.csv')
+    parser.add_argument('--community_file', type=str, help='Key of the dataset to process.', default='communities.txt')
+
     args = parser.parse_args()
 
-    base_dir = '/Volumes/Doctorado/'
-    networks = {
-        'so': (None, 'StackOverflow'),
-        'dblp': (None, 'DBLP'),
-        'amazon': (None, 'Amazon'),
-        'livejournal': (0.05, 'LiveJournal'),
-        'youtube': (0.1, 'YouTube'),
-        'orkut': (0.01, 'Orkut'),
-        'ppi': (None, 'Protein-Protein Interaction'),
-        'ddi': (None, 'Drug-Drug Interaction'),
-        'celegans': (None, 'C. Elegans')
-    }
+    dataset_file = args.dataset_file
+    homophily_file = args.homophily_file
 
-    test_network = {
-        'celegans': (None, 'C. Elegans')
-    }
+    # Set the network size 'small', 'medium' or 'large'
+    network_size = 'small'
 
-    networks = test_network
+    # Set node sample size
     node_sample_size = 3000
-    datasets_dir = base_dir + 'datasets/ext/'
 
-    for i, (network_key, value) in enumerate(networks.items()):
-        print('Running for ', i, network_key, value)
-        factor = value[0]
-        factor_part = f'_RWR_{factor}' if factor else ''
-        experiments_dir = base_dir + 'experiments/ext/'
-        network_file_path = f'{datasets_dir}{network_key}_network{factor_part}.txt'
-        print("Network file at", network_file_path)
+    print("Network file at", dataset_file)
+    print("Homophily file at", homophily_file)
 
-        if factor:
-            communities_file = f'{experiments_dir}results/{network_key}/{network_key}_def_communities{factor_part}.txt'
-            homophily_path = f'{experiments_dir}results/{network_key}/h/{network_key}_def_homofilies{factor_part}.csv'
-        else:
-            communities_file = f'{datasets_dir}{network_key}_communities{factor_part}.txt'
-            homophily_path = experiments_dir + network_key + '_homophilies_alg3_m1.csv'
+    output_path = 'node-level_metrics.csv'
+    print("Output file at ", output_path)
 
-        print("Community file at", communities_file)
-        print("Homophily file at", homophily_path)
-        output_path = f'{experiments_dir}node_level_analysis/{network_key}_node-level_metrics_{str(node_sample_size)}.csv'
-        print("Output file at ", output_path)
-
-        calculate_network_metric(network_file_path, homophily_path, output_path, node_sample_size, network_key)
+    calculate_network_metric(dataset_file, homophily_file, output_path, node_sample_size, network_size)

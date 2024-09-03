@@ -18,46 +18,32 @@ Run the script to calculate and print Spearman correlations for each network.
 import pandas as pd
 from scipy.stats import spearmanr
 
-# Define the base directory for experiments
-base_dir = '/Volumes/Doctorado/experiments/'
+import argparse
 
-# Define networks and their respective sampling factors and readable names
-networks = {
-    'so': (None, 'StackOverflow'),
-    'dblp': (None, 'DBLP'),
-    'amazon': (None, 'Amazon'),
-    'livejournal': (0.05, 'LiveJournal'),
-    'youtube': (0.1, 'YouTube'),
-    'orkut': (0.01, 'Orkut'),
-    'ppi': (None, 'Protein-Protein Interaction'),
-    'ddi': (None, 'Drug-Drug Interaction'),
-    'celegans': (None, 'C. Elegans')
-}
+parser = argparse.ArgumentParser(description='Script for Spearman\'s coefficients calculation.')
+parser.add_argument('--network_metrics_file', type=str, help='Network-Level metrics file.', default='networkLevel_results.csv')
 
+args = parser.parse_args()
+
+network_metrics_file = args.network_metrics_file
 # Process each network and calculate correlations
-for network_key, (factor, readable_name) in networks.items():
-    factor_part = f'_RWR_{factor}' if factor else ''
-    results_file = f'{base_dir}ext/results/{network_key}/{network_key}_networkLevel_results{factor_part}_new.csv'
 
-    # Load data
-    data = pd.read_csv(results_file)
-    data = data.query("Threshold != 'def'")
+# Load data
+data = pd.read_csv(network_metrics_file)
+data = data.query("Threshold != 'def'")
 
-    print(f"Analysis for: {readable_name}")
+# Calculate Spearman correlation between pluralistic homophily and overlap coverage
+corr_h_oc, p_value_h_oc = spearmanr(data['Pluralistic Homophily'], data['Overlap Coverage'])
+print(f"Spearman correlation between h and OC: {corr_h_oc}, p-value: {p_value_h_oc}")
 
-    # Calculate Spearman correlation between pluralistic homophily and overlap coverage
-    corr_h_oc, p_value_h_oc = spearmanr(data['Pluralistic Homophily'], data['Overlap Coverage'])
-    print(f"Spearman correlation between h and OC: {corr_h_oc}, p-value: {p_value_h_oc}")
-
-    # Calculate Spearman correlation between pluralistic homophily and average scaled link-density
-    corr_h_asdl, p_value_h_asdl = spearmanr(data['Pluralistic Homophily'], data['Avg Scaled Link-Density'])
-    print(f"Spearman correlation between h and asld: {corr_h_asdl}, p-value: {p_value_h_asdl}")
+# Calculate Spearman correlation between pluralistic homophily and average scaled link-density
+corr_h_asdl, p_value_h_asdl = spearmanr(data['Pluralistic Homophily'], data['Avg Scaled Link-Density'])
+print(f"Spearman correlation between h and asld: {corr_h_asdl}, p-value: {p_value_h_asdl}")
 
 # Uncomment the following code if want to visualize the results
 # import matplotlib.pyplot as plt
 # plt.figure(figsize=(10, 6))
 # plt.plot(data['Threshold'], data['Pluralistic Homophily'], marker='o')
-# plt.title('Network-Level pluralistic homophily vs Threshold for ' + readable_name)
 # plt.xlabel('Threshold')
 # plt.ylabel('Network-Level pluralistic homophily, $h$')
 # plt.grid(True)

@@ -15,6 +15,8 @@ Libraries:
 
 Usage:
 Modify the base_path variable to point to the directory containing your data files.
+Set the names of network files with a prefix according to the dataset key
+
 """
 
 import warnings
@@ -51,8 +53,6 @@ datasets = {
 networks = list(datasets.keys())
 network_legends = list(datasets.values())
 
-# Modify this to the base directory of your files
-base_path = '/Volumes/Doctorado/experiments/ext/node_level_analysis/'
 
 # Configure subplots
 fig, axes = plt.subplots(nrows=3, ncols=3, figsize=(15, 15), sharex=True)
@@ -64,7 +64,7 @@ class_labels = {0: 'Assortative', 1: 'Non-Assortative', 2: 'Disassortative'}
 # Process each network
 for idx, network in enumerate(networks):
     print(f'Processing network: {network}')
-    data_path = f"{base_path}{network}_node-level_metrics_3000.csv"
+    data_path = f"{network}_node-level_metrics.csv"
     data = pd.read_csv(data_path)
     X = data[['degree', 'closeness', 'eigenvector']]
     y = data['label']

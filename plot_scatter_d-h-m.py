@@ -12,6 +12,8 @@ Libraries:
 
 Usage:
 Modify the input_directory and output_directory variables to point to the appropriate directories containing your data files.
+Set the names of network and homophily files with a prefix according to the dataset key
+
 """
 
 import math
@@ -45,10 +47,6 @@ def read_file(file, separator, skip_header=False):
             result_list.append(list_line)
     return result_list
 
-
-alg = 'alg3'
-scalar_method = 'm1'
-
 verbose = True
 plot_show = True
 plot_save = False
@@ -65,10 +63,6 @@ dataset_dict = {
     "celegans": ("C.elegans", 3, 5)
 }
 
-input_directory = '/Volumes/Doctorado/experiments/'
-output_directory = '/Volumes/Doctorado/experiments/'
-data_dir = 'datasets/'
-plot_dir = 'plots/'
 weights_option = False
 
 HOMOPHILY_AXIS = 1
@@ -102,7 +96,7 @@ for i_subplot, dataset in enumerate(dataset_dict.keys()):
     print("i_subplot=", i_subplot)
 
     input_file = dataset + "_network"
-    homophilies_file = f'/Volumes/Doctorado/experiments/ext/{dataset}_homophilies_{alg}_{scalar_method}.csv'
+    homophilies_file = f'{dataset}_homophilies.csv'
 
     delay = time.time() - t0
     print("duration: %.2f s." % delay)
@@ -243,7 +237,7 @@ if plot_save:
     else:
         dataset_names = 'All'
 
-    plt.savefig(output_directory + plot_dir + dataset_names + "-scatter.png")
+    plt.savefig(dataset_names + "-scatter.png")
 if plot_show:
     print("Plotting....")
     plt.show()

@@ -10,7 +10,6 @@ The results are saved to an output file.
 Libraries:
 - igraph for graph manipulation
 - hlc for hierarchical link clustering (assuming you have this library)
-- gc for garbage collection
 
 Usage:
 Modify the `network_file_path` to point to the appropriate network file.
@@ -20,24 +19,31 @@ Run the script to perform community detection at various thresholds and save the
 import sys
 
 from igraph import *
+import hlc
+import argparse
 
-# General settings
-verbose = True
-experiments_dir = '/Volumes/Doctorado/experiments/ext/'
-datasets_dir = '/Volumes/Doctorado/datasets/ext/'
-dataset_key = 'celegans'
+# Set args parser
+parser = argparse.ArgumentParser(description='Process dataset key for the network file.')
 
-# Path to the network file
-network_file_path = f'{datasets_dir}{dataset_key}_network.txt'
+# Set de default value for 'dataset_key'
+parser.add_argument('--dataset_file', type=str, default='TextAb10_wsw', help='The name of the dataset (default: TextAb10_wsw)')
+
+# Args parsing
+args = parser.parse_args()
+
+# Use dataset_file value
+dataset_file = args.dataset_file
+
+print(f'Using dataset: {dataset_file}')
 
 # Graph properties
 Is_Directed = False
 weight_option = True
 
-print(f"Reading ncol file {network_file_path} and building network...")
+print(f"Reading ncol file {dataset_file} and building network...")
 
 # Read the graph from the .ncol file
-g = Graph.Read_Ncol(network_file_path, weights=weight_option, directed=Is_Directed)
+g = Graph.Read_Ncol(dataset_file, weights=weight_option, directed=Is_Directed)
 
 # Obtain the largest strongly connected component
 c = g.connected_components("strong")
@@ -54,20 +60,15 @@ scc.simplify(combine_edges={"weight": sum})
 print("Number of vertices =", scc.vcount())
 print("Number of edges =", scc.ecount())
 
-# Exit the script early for testing purposes (remove this line in the final script)
-sys.exit()
-
 # Assign the simplified graph to the original variable
 g = scc
 
 # Initialize the HLC algorithm with the graph
 alg = hlc.HLC(g)
 
-# Clean up memory
-gc.collect()
-
 # Define thresholds for the HLC algorithm
-threshold_runs = [None, 1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]
+threshold_runs = [None]
+#threshold_runs = [None, 1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]
 
 # Execute the HLC algorithm and store the results
 for threshold in threshold_runs:
@@ -82,7 +83,7 @@ for threshold in threshold_runs:
     j = 0
 
     # Output file for communities
-    communities_file = f'{experiments_dir}{dataset_key}_{str(threshold)}_communities.txt'
+    communities_file = f'communities.txt'
 
     # Write communities to the output file
     print("Writing file", communities_file)
