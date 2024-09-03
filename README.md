@@ -76,7 +76,10 @@ python3 hlc_run.py -dataset_file 'dataset_file'
 
 3. **Metric Calculation:**
 
-   Run the scripts for both network and local level pluralistic homophily, OC and rho calculation:
+   Run the scripts for both network and local level pluralistic homophily calculation:
+
+   - Network Level: Metric \( h \) and , OC and rho are calculated for the network.
+   - Node Level: Metric \( h_v \) and centrality measures such as \( C_d \),  \( C_c \),  \( C_b \), \( C_e \) are calculated for individual nodes.
 
 ```bash
 python3 calc_pluralistic_homophily_metrics.py -dataset_file 'dataset_file'
@@ -87,8 +90,6 @@ python3 calc_pluralistic_homophily_metrics.py -dataset_file 'dataset_file'
 ```bash
 python3 calc_centrality_metrics.py -community_file 'community_file' -homophily_file 'homophily_file'
 ```
-
-   - Node Level: Metric \( h_v \) and centrality measures such as \( C_d \),  \( C_c \),  \( C_b \), \( C_e \) are calculated for individual nodes.
 
 4. **Visualization:**
 
