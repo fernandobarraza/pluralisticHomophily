@@ -31,6 +31,17 @@ pip install -r requirements.txt
 
 ## Usage
 
+Run Pipeline as following:
+1. Run hlc_run.py . This script calculates the overlapping communities for your network. If you have a ground-truth community file, this step is not necessary.
+2. Run calc_pluralistic_homophily_metrics.py . This scripts calculates pluralistic homophily for the network and local pluralistic homophily for each node within your network.
+3. Run calc_spearman.py if you want to calculate Spearman correlation betweeen pluralistic homophily and network-level metrics.
+4. Run calc_centrality_metrics.py to calculate centrality measures for the network.
+
+Some general considerations:
+
+- You must set the defaults directories for datasets and experiments result. Set the name of the directories within each script depending of your preferences.
+- A dataset dictionary named 'network' inside the scripts defines the network(s) to be processed. Change on your preferences.
+
 1. **Dataset Reading and Network Reconstruction:**
 
    Download the network and community files for each dataset and put on your desired directories. All datasets used in this project are publicly available. The Stack Overflow (SO) dataset has been preprocessed and is directly provided in this repository.
@@ -84,22 +95,12 @@ python3 calc_centrality_metrics.py -community_file 'community_file' -homophily_f
 
    - Node Level: Metric \( h_v \) and centrality measures such as \( C_d \),  \( C_c \),  \( C_b \), \( C_e \) are calculated for individual nodes.
 
-4. **Correlation Analysis and Visualization:**
-   - The linear and monotonic relationships between centrality metrics and pluralistic homophily at both the network and the node levels are initially examined using the Spearman correlation index. Logistic regression models are then utilized to predict the categories of pluralistic homophily (assortative, non-assortative, disassortative) based on the centrality measures calculated for each node.
-
-Some general considerations:
-
-- You must set the defaults directories for datasets and experiments result. Set the name of the directories within each script depending of your preferences.
-- A dataset dictionary named 'network' inside the scripts defines the network(s) to be processed. Change on your preferences.
-- Set the variables flags at the top of the script to control if you want to save the results and plot images.
-
-Run Pipeline as following:
-1. Run hlc_run.py . This script calculates the overlapping communities for your network. If you have a ground-truth community file, this step is not necessary.
-2. Run calc_pluralistic_homophily_metrics.py . This scripts calculates pluralistic homophily for the network and local pluralistic homophily for each node within your network.
-4. Run calc_spearman.py if you want to calculate Spearman correlation betweeen pluralistic homophily and network-level metrics.
-5. Run calc_centrality_metrics.py to calculate centrality measures for the network.
+4. **Visualization:**
 
 All plot_*.py files can be executed any time after the pipeline is completed. No arguments are needed but you must rename the result files, using a prefix with the dataset key for each dataset.
+
+- Set the variables flags at the top of the script to control if you want to save the results and plot images.
+
 
 ##  Contributing
 
