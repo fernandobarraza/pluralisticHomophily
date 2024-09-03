@@ -60,12 +60,7 @@ Preprocessed Dataset:
 
 2. **Community Detection:**
 
-   Run the script to calculate the overlapping communities for your network. 
-
-   If you have a ground-truth community file, this step is not necessary:
-
-   - In networks like SO, PPI, DDI, and C. elegans, communities are detected using the HLC algorithm.
-   - In networks such as DBLP, Amazon, LiveJournal, YouTube, and Orkut, communities are identified based on ground-truth data.
+   Run the script to calculate the overlapping communities for your network. If you have a ground-truth community file, this step is not necessary.
 
 ```bash
 python3 hlc_run.py -dataset_file 'dataset_file'
@@ -73,7 +68,7 @@ python3 hlc_run.py -dataset_file 'dataset_file'
 
    Using the HLC Algorithm:
 
-   - Default network file is the StackOverflow. Use the right dataset_file as an argument in command line execution.
+   - Default network file is the the text for Bee definition. Use the right dataset_file as an argument in command line execution.
    - All network datasets files must be in NCol format.
    - Set the variable weight_option to True or False according to your preferences.
    - In the code, change the threshold_runs list if you want to change for what thresholds you will cut the dendrogram in the HLC algorithm.
