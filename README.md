@@ -32,34 +32,74 @@ pip install -r requirements.txt
 ## Usage
 
 1. **Dataset Reading and Network Reconstruction:**
-   - Datasets are read to reconstruct network graphs. For larger networks such as LiveJournal, YouTube, and Orkut, sampling techniques are applied to effectively manage execution times during subsequent calculations.
+
+   Download the network and community files for each dataset and put on your desired directories. All datasets used in this project are publicly available. The Stack Overflow (SO) dataset has been preprocessed and is directly provided in this repository.
+
+Links to Public Datasets:
+
+**General Networks (DBLP, Amazon, Livejournal, Youtube, Orkut)**: 
+   - [SNAP Datasets](https://snap.stanford.edu/data/)
+
+**Biological Networks (PPI, DDI, and C.elegans)**:
+   - [BioSNAP Datasets](https://snap.stanford.edu/biodata/index.html)
+
+Preprocessed Dataset:
+
+   - The preprocessed network file is available in this repository as `so_network.txt`.
 
 2. **Community Detection:**
-   - Using the HLC Algorithm: In networks like SO, PPI, DDI, and C. elegans, communities are detected using the HLC algorithm.
-   - Using Ground-Truth Data: In networks such as DBLP, Amazon, LiveJournal, YouTube, and Orkut, communities are identified based on ground-truth data.
+
+   Run the script to calculate the overlapping communities for your network. 
+
+   If you have a ground-truth community file, this step is not necessary:
+
+   - In networks like SO, PPI, DDI, and C. elegans, communities are detected using the HLC algorithm.
+   - In networks such as DBLP, Amazon, LiveJournal, YouTube, and Orkut, communities are identified based on ground-truth data.
+
+```bash
+python3 hlc_run.py -dataset_file 'dataset_file'
+```
+
+   Using the HLC Algorithm:
+
+   - Default network file is the StackOverflow. Use the right dataset_file as an argument in command line execution.
+   - All network datasets files must be in NCol format.
+   - Set the variable weight_option to True or False according to your preferences.
+   - In the code, change the threshold_runs list if you want to change for what thresholds you will cut the dendrogram in the HLC algorithm.
+   - At the end, the script generates a file 'communities.txt' that is used in the next step.
 
 3. **Metric Calculation:**
-   - Network Level: Overall pluralistic homophily \( h \), OC, and \( \tilde{\rho} \) across communities are computed.
+
+   Run the scripts for both network and local level pluralistic homophily, OC and rho calculation:
+
+```bash
+python3 calc_pluralistic_homophily_metrics.py -dataset_file 'dataset_file'
+```
+
+   Run the scripts for centrality metrics calculation, \( C_d \),  \( C_c \),  \( C_b \), \( C_e \):
+
+```bash
+python3 calc_centrality_metrics.py -community_file 'community_file' -homophily_file 'homophily_file'
+```
+
    - Node Level: Metric \( h_v \) and centrality measures such as \( C_d \),  \( C_c \),  \( C_b \), \( C_e \) are calculated for individual nodes.
 
 4. **Correlation Analysis and Visualization:**
    - The linear and monotonic relationships between centrality metrics and pluralistic homophily at both the network and the node levels are initially examined using the Spearman correlation index. Logistic regression models are then utilized to predict the categories of pluralistic homophily (assortative, non-assortative, disassortative) based on the centrality measures calculated for each node.
 
-Some general consideratios:
+Some general considerations:
 
 - You must set the defaults directories for datasets and experiments result. Set the name of the directories within each script depending of your preferences.
-- All network datasets files must be in NCol format.
-- A dataset dictionary named 'netowrk' inside the scripts defines the network(s) to be processed. Change on your preferences.
+- A dataset dictionary named 'network' inside the scripts defines the network(s) to be processed. Change on your preferences.
 - Set the variables flags at the top of the script to control if you want to save the results and plot images.
 
 Run Pipeline as following:
 1. Run hlc_run.py . This script calculates the overlapping communities for your network. If you have a ground-truth community file, this step is not necessary.
-2. Run calc_pluralistic_homophily.py . This script generates local pluralistic homophily for each node within your network.
-3. Run calc_networks_metrics.py. This scripts calculates pluralistic homophily for the network.
+2. Run calc_pluralistic_homophily_metrics.py . This scripts calculates pluralistic homophily for the network and local pluralistic homophily for each node within your network.
 4. Run calc_spearman.py if you want to calculate Spearman correlation betweeen pluralistic homophily and network-level metrics.
 5. Run calc_centrality_metrics.py to calculate centrality measures for the network.
 
-All plot_*.py files can be executed any time after the pipeline is completed.
+All plot_*.py files can be executed any time after the pipeline is completed. No arguments are needed but you must rename the result files, using a prefix with the dataset key for each dataset.
 
 ##  Contributing
 
