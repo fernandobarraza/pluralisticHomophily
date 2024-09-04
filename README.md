@@ -44,7 +44,7 @@ Some general considerations:
 
 1. **Dataset Reading and Network Reconstruction:**
 
-   Download the network and community files for each dataset and put on your desired directories. All datasets used in this project are publicly available. The Stack Overflow (SO) dataset has been preprocessed and is directly provided in this repository.
+   Download the network and community files for each dataset and put on your desired directories. All datasets used in this project are publicly available. 
 
 Links to Public Datasets:
 
@@ -56,7 +56,7 @@ Links to Public Datasets:
 
 Preprocessed Dataset:
 
-   - The preprocessed network file is available in this repository as `so_network.txt`.
+   - The preprocessed datasets are also available at https://doi.org/10.5281/zenodo.13647528 .
 
 2. **Community Detection:**
 
