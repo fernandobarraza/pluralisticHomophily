@@ -7,8 +7,9 @@ This project implements a comprehensive pipeline for analyzing pluralistic homop
 1. [Introduction](#introduction)
 2. [Installation](#installation)
 3. [Usage](#usage)
-4. [Contributing](#contributing)
-5. [License](#license)
+4. [Acknowledgements](#acknowledgements)
+5. [Contributing](#contributing)
+6. [License](#license)
 
 ## Introduction
 
@@ -97,6 +98,10 @@ All plot_*.py files can be executed any time after the pipeline is completed. No
 
 - Set the variables flags at the top of the script to control if you want to save the results and plot images.
 
+
+## Acknowledgements
+
+The implementation of the Hierarchical Link Clustering (HLC) algorithm used in this project was originally developed by Tamás Nepusz. His implementation is available at ntamas/hlc. Special thanks to Tamás Nepusz for making the code publicly available.
 
 ##  Contributing
 
